@@ -92,6 +92,8 @@ def main():
             find_security_issues(json_response,cur)
             find_license_issues(json_response,cur)
             find_quality_issues(json_response,cur)
+            last_run_query="update last_update set last_run=datetime(\'now\', \'localtime\') where metric=\'FOSSA\'"
+            cur.execute(last_run_query)
             
 
     except HTTPError as http_err:

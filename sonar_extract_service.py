@@ -109,7 +109,8 @@ def main():
             query_str = "delete from sonar_metrics where project ='"+project+"'"
             cur.execute(query_str)
             cur.execute("insert into sonar_metrics(project, quality_gate_status,overall_code_smells,overall_coverage,overall_security_hotspots_reviewed,overall_bugs,overall_vulnerabilities,overall_duplicated_lines_density,new_code_smells,new_coverage,new_security_hotspots_reviewed,new_bugs,new_vulnerabilities,new_duplicated_lines_density) values(?,?,?,?,?,?,?,?,?,?,?,?,?,? )" , (project, quality_gate_status,overall_code_smells,overall_coverage,overall_security_hotspots_reviewed,overall_bugs,overall_vulnerabilities,overall_duplicated_lines_density,new_code_smells,new_coverage,new_security_hotspots_reviewed,new_bugs,new_vulnerabilities,new_duplicated_lines_density))
-            
+            last_run_query="update last_update set last_run=datetime(\'now\', \'localtime\') where metric=\'SONAR\'"
+            cur.execute(last_run_query)
                 
 
     except HTTPError as http_err:
