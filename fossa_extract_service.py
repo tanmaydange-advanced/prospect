@@ -3,6 +3,7 @@ from requests.exceptions import HTTPError
 import sqlite3
 import datetime
 import configparser
+from tqdm import tqdm
 
 current_date = datetime.date.today()
 
@@ -74,7 +75,7 @@ def main():
         product_list.append(row[0])
 
     try:
-        for project in product_list:
+        for project in tqdm(product_list):
             URL=url+LOCATOR_PREFIX+project+URL_POST
 
             print("Processing for Product :"+project)
