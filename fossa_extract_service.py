@@ -3,9 +3,11 @@ from requests.exceptions import HTTPError
 import sqlite3
 import datetime
 import configparser
-from tqdm import tqdm
+from tqdm import tqdm 
+import logging
 
 current_date = datetime.date.today()
+logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s %(message)s', level=logging.INFO,  filename="logs/prospect-fossa.log")
 
 #Constants
 PROJECT_NAME_KEY = "Affected Project"
@@ -78,7 +80,7 @@ def main():
         for project in tqdm(product_list):
             URL=url+LOCATOR_PREFIX+project+URL_POST
 
-            print("Processing for Product :"+project)
+            logging.info("Processing for Product :"+project)
             response = requests.get(URL, headers=auth)
             response.raise_for_status()
             json_response = response.json()
@@ -97,11 +99,11 @@ def main():
             
 
     except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
+        logging.error(f'HTTP error occurred: {http_err}')
     except Exception as err:
-        print(f'Other error occurred: {err}')
+        logging.error(f'Other error occurred: {err}')
 
-    print("Done")   
+    logging.info("Done")   
     con.commit()
 
 

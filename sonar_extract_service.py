@@ -6,6 +6,10 @@ import configparser
 from tqdm import tqdm
 from sonarqube import SonarQubeClient
 import json
+import logging
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s %(message)s', level=logging.INFO,  filename="logs/prospect-sonar.log")
+
 
 current_date = datetime.date.today()
 
@@ -52,14 +56,14 @@ def main():
         product_map[row[0]] = row[1]
     
     try:
-        for project in product_map:
+        for project in tqdm(product_map):
             # Initilizing the local variables
             quality_gate_status = "N/A"
             overall_coverage=0
             new_coverage=0
             overall_security_hotspots_reviewed=0
             new_security_hotspots_reviewed=0
-            print("Processing for Product :"+project)
+            logging.info("Processing for Product :"+project)
             sonar_project_key = product_map[project]
             metric_keys = "quality_gate_details,bugs,new_bugs,vulnerabilities,new_vulnerabilities,security_hotspots_reviewed,new_security_hotspots_reviewed,code_smells,new_code_smells,coverage,new_coverage,duplicated_lines_density,new_duplicated_lines_density"
             component = sonar.measures.get_component_with_specified_measures(component=sonar_project_key,
@@ -114,11 +118,11 @@ def main():
                 
 
     except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
+        logging.error(f'HTTP error occurred: {http_err}')
     except Exception as err:
-        print(f'Other error occurred: {err}')
+        logging.error(f'Other error occurred: {err}')
 
-    print("Done")   
+    logging.info("Done")   
     con.commit()
 
 
