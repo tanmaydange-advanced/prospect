@@ -8,3 +8,5 @@ auth_key=4da0b77b447aaae675d3111a0fe1311b044fe4a3
 db=vulnerability.db
 url=https://ccq.svc.oneadvanced.com
 
+[webserver-config]
+db=vulnerability.db
