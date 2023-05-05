@@ -17,13 +17,14 @@ db=config_parser.get('webserver-config', 'db')
 
 
 urls = (
-    "/", "Index"
+    "/enroll", "Index"
 )
 
+render = web.template.frender('static/enroll.html')
+
 class Index(object):
-    # In the browser, this displays "Index", but also causes the error on the server side.
     def GET(self):
-        return "Hello, world!"
+        return render()
 
     def POST(self):
         data = web.data()
