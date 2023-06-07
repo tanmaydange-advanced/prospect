@@ -31,7 +31,6 @@ def find_security_issues(json_response,cur):
     vulnerability_list=json_response[VULENERABILITY_ISSUE_KEY]
 
     for vul in vulnerability_list:
-        cur.execute("insert into VULNERABILITY(project,dependency,details,current_version,issue_type,cve,cvss_score,cvss_severity,name,fix_version) VALUES(?, ?,?,?, ?,?,?, ?,?,?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],SECURITY_ISSUE_KEY,vul[CVE_KEY],vul[CVSS_SCORE_KEY],vul[CVSS_SEVERITY_KEY],vul[NAME_KEY],vul[REMEDIATION_ADVICE_KEY]))
         cur.execute("insert into VULNERABILITY_HIST (project,dependency,details,current_version,issue_type,cve,cvss_score,cvss_severity,name,fix_version,scan_date) VALUES(?, ?,?,?, ?,?,?, ?,?,?,?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],SECURITY_ISSUE_KEY,vul[CVE_KEY],vul[CVSS_SCORE_KEY],vul[CVSS_SEVERITY_KEY],vul[NAME_KEY],vul[REMEDIATION_ADVICE_KEY],current_date))
 
     
@@ -39,7 +38,6 @@ def find_quality_issues(json_response,cur):
     quality_list=json_response[QUALITY_ISSUES_KEY]
     
     for vul in quality_list:
-        cur.execute("insert into VULNERABILITY(project,dependency,details,current_version,issue_type) VALUES(?, ?,?,?, ?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],vul[TYPE_KEY]))
         cur.execute("insert into VULNERABILITY_HIST(project,dependency,details,current_version,issue_type,scan_date) VALUES(?, ?,?,?, ?,?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],vul[TYPE_KEY], current_date))
 
 def find_license_issues(json_response,cur):    
@@ -47,7 +45,6 @@ def find_license_issues(json_response,cur):
     license_issue_list=json_response[PACKAGE_LICENSE_ISSUES_KEY]
    
     for vul in license_issue_list:
-        cur.execute("insert into VULNERABILITY(project,dependency,details,current_version,issue_type) VALUES(?, ?,?,?, ?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],vul[ISSUE_TYPE_KEY]))
         cur.execute("insert into VULNERABILITY_HIST(project,dependency,details,current_version,issue_type, scan_date) VALUES(?, ?,?,?, ?,?)", (vul[PROJECT_NAME_KEY],vul[DEPENDENCY_KEY],vul[DETAILS_KEY],vul[REVISION_KEY],vul[ISSUE_TYPE_KEY], current_date))                 
     
 
@@ -86,8 +83,6 @@ def main():
             json_response = response.json()
             #print(jsonResponse)
             
-            query_str = "delete from VULNERABILITY where project ='"+project+"'"
-            cur.execute(query_str)
             cur.execute("delete from VULNERABILITY_HIST where project =?  and scan_date=?", (project, current_date))
 
 
