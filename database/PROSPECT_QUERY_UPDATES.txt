@@ -75,3 +75,5 @@ left join
 (select project, count(*) as LICENSE_ISSUE from VULNERABILITY_HIST where  issue_type="unlicensed dependency" and cast(strftime('%s', scan_date) as integer)*1000 BETWEEN ${__from} AND ${__to} group by project) c
 on z.product_name=c.project 
 group by z.product_name;
+
+
